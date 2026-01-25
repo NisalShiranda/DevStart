@@ -11,6 +11,15 @@ app.use(express.json());
 // This allows the frontend to talk to this server
 app.use(cors());
 
+// --- DATABASE CONNECTION ---
+// Get the connection string from .env
+const uri = process.env.MONGO_URI;
+
+// Connect to MongoDB
+mongoose.connect(uri)
+  .then(() => console.log("MongoDB connection established successfully!"))
+  .catch((error) => console.error("MongoDB connection failed:", error.message));
+
 // --- ROUTES ---
 // A test route to make sure it works
 app.get('/', (req, res) => {
