@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const projectRoutes = require('./routes/project.js');
+
 const app = express();
 
 // --- MIDDLEWARE ---
@@ -10,6 +12,8 @@ const app = express();
 app.use(express.json());
 // This allows the frontend to talk to this server
 app.use(cors());
+
+app.use('/api/projects', projectRoutes);
 
 // --- DATABASE CONNECTION ---
 // Get the connection string from .env
