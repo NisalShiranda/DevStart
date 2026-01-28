@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const projectRoutes = require('./routes/project.js');
+const userRoutes = require('./routes/user.js');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/projects', projectRoutes);
+app.use('/api/users', userRoutes);
 
 // --- DATABASE CONNECTION ---
 // Get the connection string from .env
