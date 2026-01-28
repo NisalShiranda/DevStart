@@ -69,4 +69,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// --- SAVE / UNSAVE PROJECT ---
+// URL: http://localhost:5000/api/users/save
+// User මේකට Project ID එක එවන්න ඕන
+router.put('/save', async (req, res) => {
+  try {
+    const { userId, projectId } = req.body; // Frontend එකෙන් එවන ID දෙක
+
+    const user = await User.findById(userId);
+
+    // Project එක දැනටමත් ලිස්ට් එකේ තියෙනවද බලනවා
+    const isSaved = user.savedProjects.includes(projectId);
+
+    if (isSaved) {
+      // තිබුනොත් අයින් කරනවා (Unsave)
+      user.savedProjects = user.savedProjects.filter(id => id.toString() !== projectId);
+      await user.save();
+      res.json({ message: "Project removed from saved list", savedProjects: user.savedProjects });
+    } else {
+      // නැත්නම් එකතු කරනවා (Save)
+      user.savedProjects.push(projectId);
+      await user.save();
+      res.json({ message: "Project saved successfully", savedProjects: user.savedProjects });
+    }
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

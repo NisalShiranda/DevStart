@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project.js');
+const adminAuth = require('../middleware/auth');
 
-router.post('/', async (req, res) => {
+router.post('/', adminAuth, async (req, res) => {
 
     const newProject = new Project({
 
@@ -23,7 +24,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.get('/',  async (req, res) => {
   try {
     // 1. URL එකෙන් එවන "Query" ටික අල්ලගන්නවා
     const { difficulty, tech } = req.query;
@@ -50,7 +51,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', adminAuth, async (req, res) => {
     
 });
 
@@ -58,7 +59,7 @@ router.post('/:id', async (req, res) => {
 
 // --- ROUTE 3: UPDATE A PROJECT (තියෙන එකක් වෙනස් කිරීම) ---
 // URL: http://localhost:5000/api/projects/:id
-router.put('/:id', async (req, res) => {
+router.put('/:id',adminAuth, async (req, res) => {
   try {
     // 1. ID එකෙන් හොයලා, අලුත් විස්තර (req.body) දාලා වෙනස් කරන්න
     // { new: true } කියන්නේ වෙනස් කරපු අලුත් ඩේටා එක ආපහු එවන්න කියන එකයි
@@ -81,7 +82,7 @@ router.put('/:id', async (req, res) => {
 
 // --- ROUTE 4: DELETE A PROJECT (තියෙන එකක් මැකීම) ---
 // URL: http://localhost:5000/api/projects/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',adminAuth, async (req, res) => {
   try {
     // 1. ID එකෙන් හොයලා මකලා දාන්න
     const deletedProject = await Project.findByIdAndDelete(req.params.id);
