@@ -23,14 +23,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req,res) => {
+router.get('/', async (req, res) => {
+  try {
+    // 1. URL එකෙන් එවන "Query" ටික අල්ලගන්නවා
+    const { difficulty, tech } = req.query;
 
-    try{
-        const projects = await Project.find();
-        res.json(projects);
-    }catch(error){
-        res.status(500).json({ message: error.message });
+    // 2. Filter එකක් හදාගන්නවා
+    let query = {};
+
+    // යූසර් "difficulty" එකක් එව්වොත්, ඒක ෆිල්ටර් එකට දානවා
+    if (difficulty) {
+      query.difficulty = difficulty;
     }
+
+    // යූසර් "tech" එකක් එව්වොත් (උදා: React), ඒක තියෙනවද බලනවා
+    if (tech) {
+      query.techStack = { $in: [tech] }; // $in කියන්නේ "මේක ඇතුලේ තියෙනවද" බලන්න කියලයි
+    }
+
+    // 3. ඒ ෆිල්ටර් එකට ගැලපෙන ඒවා විතරක් සොයනවා
+    const projects = await Project.find(query);
+    
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.post('/:id', async (req, res) => {
